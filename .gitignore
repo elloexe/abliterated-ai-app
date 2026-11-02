@@ -1,0 +1,18 @@
+# Bundled runtime files: shipped through GitHub Releases, never committed
+/bin/
+/models/
+/runtime/
+/data/
+/workspace/
+/download/
+/dist/
+
+# Local settings and build output
+/config.json
+*.exe
+*.syso
+*.gguf
+*.gguf.part*
+*.zip
+*.partial
+*.download
