@@ -160,7 +160,8 @@ A source build has no release manifest. Put `bin\` and `models\` next to the exe
 b12058 (CUDA 12.4), the cudart zip and both GGUFs, and checks the GGUFs against Hugging Face's
 SHA-256. It splits the 9B into 1900 MiB parts and writes `manifest.json` with every checksum. It
 then compiles that manifest into `Kestrel.exe` and publishes all of it as a release. Run it from the
-Actions tab (*Release* › *Run workflow*) or push a `v*` tag.
+Actions tab (*Release* › *Run workflow*), push a `v*` tag, or push a commit whose message contains
+`[release]` (the version then comes from `VERSION`).
 
 `bin/`, `models/`, `runtime/`, `data/` and `workspace/` are in `.gitignore`. Model and engine files
 travel only through releases.

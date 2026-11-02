@@ -14,6 +14,9 @@ on:
         default: "v1.0.0"
   push:
     tags: ["v*"]
+    # A push to any branch publishes only if the commit message says [release];
+    # the version then comes from the VERSION file.
+    branches: ["**"]
 
 permissions:
   contents: write
@@ -30,6 +33,7 @@ env:
 
 jobs:
   release:
+    if: github.event_name != 'push' || startsWith(github.ref, 'refs/tags/') || contains(github.event.head_commit.message, '[release]')
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -39,7 +43,9 @@ jobs:
         id: tag
         run: |
           TAG="${{ github.event.inputs.tag }}"
-          [ -z "$TAG" ] && TAG="${GITHUB_REF_NAME}"
+          if [ -z "$TAG" ]; then
+            if [ "${GITHUB_REF_TYPE}" = "tag" ]; then TAG="${GITHUB_REF_NAME}"; else TAG="v$(tr -d ' \r\n' < VERSION)"; fi
+          fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           NUM="$(echo "$TAG" | sed -E 's/^v//; s/[^0-9.].*$//')"
           IFS=. read -r A B C <<< "$NUM"
